@@ -1,4 +1,8 @@
+copy paste following code:
+
+
 $port=8090; $root=(Get-Location).Path; $l=New-Object System.Net.HttpListener; $l.Prefixes.Add("http://localhost:$port/"); $l.Start(); Write-Host "Serving $root at http://localhost:$port/  (Ctrl+C to stop)"; while($l.IsListening){ $c=$l.GetContext(); $p=$c.Request.Url.AbsolutePath.TrimStart('/'); if([string]::IsNullOrWhiteSpace($p)){$p="index.html"}; $f=Join-Path $root $p; if(Test-Path $f){ $b=[IO.File]::ReadAllBytes($f); $ext=[IO.Path]::GetExtension($f).ToLower(); $ct=switch($ext){ ".html"{"text/html"} ".js"{"text/javascript"} ".json"{"application/json"} ".css"{"text/css"} ".svg"{"image/svg+xml"} default{"application/octet-stream"} }; $c.Response.ContentType=$ct; $c.Response.ContentLength64=$b.Length; $c.Response.OutputStream.Write($b,0,$b.Length); } else { $c.Response.StatusCode=404 }; $c.Response.OutputStream.Close() }
+
 
 
 
