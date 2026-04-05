@@ -2826,13 +2826,14 @@ function onWebLlmInitProgress(report) {
 }
 
 function buildMlceEngineConfig(webllm) {
-  const engineOptions = {
-    initProgressCallback: onWebLlmInitProgress,
-    logLevel: 'INFO',
-    chatOpts: {
-      max_gen_len: 768
-    }
-  };
+    const engineOptions = {
+      lowLatency: true,
+      initProgressCallback: onWebLlmInitProgress,
+      logLevel: 'INFO',
+      chatOpts: {
+        max_gen_len: 768
+      }
+    };
   if (webllm.prebuiltAppConfig) {
     engineOptions.appConfig = { ...webllm.prebuiltAppConfig };
   }
@@ -2970,7 +2971,11 @@ async function legacyConsoleAsk(prompt) {
 
 async function initEngine() {
   if (modelLoaded && engine) return;
-  if (!navigator.gpu) throw new Error(WEBGPU_UNAVAILABLE_MESSAGE);
+if (!navigator.gpu) {
+    log('WebGPU unavailable on this device. Continuing as guest/coordinator - Ask will route to WebGPU peer if available.');
+    localHasWebGPU = false;
+    return;
+  }
   if (!engineInitInFlight) {
     engineInitInFlight = (async () => {
       try {
@@ -3539,8 +3544,10 @@ async function handleMessage(msg, dc) {
       authenticatedPeers.set(pid, true);
       peerWebGpuByPeer.set(pid, msg.webgpu === true);
       touchPeerStat(pid, { webgpu: msg.webgpu === true });
-      (msg.knownPeerIds || []).forEach(id => P2PAgents.knownPeerIds.add(id));
-      P2PAgents.knownPeerIds.add(pid);
+  (msg.knownPeerIds || []).forEach(id => P2PAgents.knownPeerIds.add(id));
+      updatePeers();
+  P2PAgents.knownPeerIds.add(pid);
+      updatePeers();
       dc._remotePeerId = pid;
       channelsByPeer.set(pid, dc);
       if (dc._pc) {
@@ -3574,7 +3581,7 @@ async function handleMessage(msg, dc) {
       if (msg.peerId) authenticatedPeers.set(msg.peerId, true);
       (msg.knownPeerIds || []).forEach(id => P2PAgents.knownPeerIds.add(id));
       if (msg.peerId) {
-        P2PAgents.knownPeerIds.add(msg.peerId);
+P2PAgents.knownPeerIds.add(msg.peerId);
         if (msg.webgpu === true || msg.webgpu === false) {
           peerWebGpuByPeer.set(msg.peerId, msg.webgpu);
           touchPeerStat(msg.peerId, { webgpu: msg.webgpu === true });
@@ -4778,8 +4785,11 @@ async function init() {
     'color:inherit'
   );
   if (!navigator.gpu) {
-    updateStatus('Guest mode — join a room and Ask will run on the coordinator device.', 'connected');
-    log('No local WebGPU — this device works as a guest. Connect to a host with WebGPU to use Ask.');
+    updateStatus(
+      'Error: WebGPU unavailable in this browser context. Open the app from localhost:8080 or launch Chrome with --unsafely-treat-insecure-origin-as-secure=http://192.168.10.239:8080.',
+      'disconnected'
+    );
+    log('navigator.gpu is not available. WebGPU requires a secure context such as localhost or a properly enabled browser flag.');
   } else {
     try {
       if (doInviteAuto) {
@@ -4787,8 +4797,9 @@ async function init() {
           try {
             await initEngine();
             updateStatus('AI ready. Create or join a room.', 'connected');
-          } catch {
-            updateStatus('Guest OK — local model not used on this device (P2P still works).', 'connected');
+          } catch (innerErr) {
+            updateStatus(`Error initializing WebGPU AI: ${innerErr?.message || innerErr}`, 'disconnected');
+            log(`initEngine failed: ${innerErr?.message || innerErr}`);
           }
         })();
       } else {
@@ -4797,8 +4808,11 @@ async function init() {
       }
     } catch (e) {
       if (isWebGpuUnsupportedError(e)) {
-        updateStatus('Guest mode — join a room and Ask will run on the coordinator device.', 'connected');
-        log('No local WebGPU — this device works as a guest. Connect to a host with WebGPU to use Ask.');
+        updateStatus(
+          'Error: WebGPU unsupported in this context. Use localhost or secure origin, or enable the Chrome unsafe origin flag.',
+          'disconnected'
+        );
+        log(`WebGPU unsupported error: ${e?.message || e}`);
       } else {
         updateStatus(`Error: ${e.message}`, 'disconnected');
       }

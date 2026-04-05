@@ -19,7 +19,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, unquote, urlparse
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-_SERVER_PORT = 8000
+_SERVER_PORT = 8080
 _BIND_HOST = "0.0.0.0"
 _ROOMS: dict[str, dict[str, str | None]] = {}
 _ROOM_LOCK = threading.Lock()
