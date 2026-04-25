@@ -1,7 +1,7 @@
 {
   "pass": true,
   "source": "synthetic",
-  "source_repo": null,
+  "source_repo": null
   "scenarios": [
     {
       "lines": 10000,
