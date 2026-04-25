@@ -5,7 +5,7 @@ Supports: mDNS/Bonjour, UPnP, manual LAN IP, QR codes
 Compatible with: Windows, macOS, Linux, Android, iOS
 No port forwarding needed - works on same LAN automatically.
 """
-
+from __future__ import annotations
 
 import json
 import os
