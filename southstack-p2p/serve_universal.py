@@ -7,8 +7,6 @@ No port forwarding needed - works on same LAN automatically.
 """
 from __future__ import annotations
 
-import erno
-import io
 import json
 import os
 import socket
@@ -26,17 +24,7 @@ _BIND_HOST = "0.0.0.0"
 _ROOMS: dict[str, dict[str, str | None]] = {}
 _ROOM_LOCK = threading.Lock()
 _MDNS_NAME = None
-_DEBUG_LOG_PATH = os.environ.get("SOUTHSTACK_DEBUG_LOG", os.path.join(ROOT, "southstack-debug.log"))
-
-
-def _addr_in_use(err: OSError) -> bool:
-    if err.errno == 48:
-        return True
-    if err.errno in (10048, 98):
-        return True
-    if getattr(err, "winerror", None) == 10048:
-        return True
-    return False
+_DEBUG_LOG_PATH = "/Users/eloneflax/cse327/.cursor/debug-947c6e.log"
 
 
 def dbg_log(run_id: str, hypothesis_id: str, location: str, message: str, data: dict | None = None) -> None:
@@ -118,7 +106,7 @@ def get_all_local_ips() -> list[str]:
                         if ip and ip not in seen and not ip.startswith("127."):
                             seen.add(ip)
                             ips.append(ip)
-    except (OSError, subprocess.SubprocessError):
+    except Exception:
         pass
     
     return ips
@@ -155,9 +143,7 @@ def generate_qr_code(url: str) -> str:
         qr = qrcode.QRCode(version=1, box_size=1, border=2)
         qr.add_data(url)
         qr.make(fit=True)
-        out = io.StringIO()
-        qr.print_ascii(out=out, tty=False)
-        return out.getvalue()
+        return qr.print_ascii(tty=False)
     except ImportError:
         # Fallback: simple text representation
         return f"\n📱 Scan QR or open: {url}\n"
@@ -337,8 +323,8 @@ class Handler(BaseHTTPRequestHandler):
     def _static_get(self, path: str) -> None:
         if path in ("/", ""):
             path = "/index.html"
-       fs = os.path.abspath(os.path.normpath(os.path.join(ROOT, path.lstrip("/"))))
-        if os.path.commonpath([ROOT, fs]) != ROOT:
+        fs = os.path.normpath(os.path.join(ROOT, path.lstrip("/")))
+        if not fs.startswith(ROOT):
             self.send_error(403)
             return
         if os.path.isdir(fs):
@@ -429,14 +415,7 @@ def print_startup_banner(port: int, requested_port: int) -> None:
 
 def main() -> None:
     global _SERVER_PORT, _BIND_HOST
-
-    if sys.platform == "win32":
-        try:
-            sys.stdout.reconfigure(encoding="utf-8")
-            sys.stderr.reconfigure(encoding="utf-8")
-        except (AttributeError, OSError):
-            pass
-
+    
     requested_port = int(os.environ.get("PORT", "8000"))
     port = requested_port
     host = os.environ.get("BIND", "0.0.0.0")
@@ -454,7 +433,7 @@ def main() -> None:
             break
         except OSError as e:
             bind_error = e
-            if not _addr_in_use(e):
+            if e.errno != 48:
                 raise
     
     if not httpd:
