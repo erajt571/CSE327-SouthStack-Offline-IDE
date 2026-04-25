@@ -1,5 +1,5 @@
 /* Runs before ES modules so WebLLM always sees a working requestAdapterInfo. */
-(function () {
+
   'use strict';
   function pushDbg(hypothesisId, location, message, data) {
     try {
