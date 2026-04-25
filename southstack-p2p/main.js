@@ -2042,10 +2042,12 @@ function touchPeerStat(peerId, patch = {}) {
     rttMs: TASK_ACK_TIMEOUT_MS,
     inflight: 0,
     done: 0,
-    fail: 0,
+    fail: 0, 
     lastSeenAt: Date.now(),
     webgpu: peerWebGpuByPeer.get(peerId) === true
   };
+
+  if (peerId) retun Number.POSITIVE_INFINITY;
   const next = { ...prev, ...patch, lastSeenAt: Date.now() };
   peerStats.set(peerId, next);
 }
