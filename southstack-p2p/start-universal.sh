@@ -5,7 +5,7 @@
 echo "🚀 Starting SouthStack Universal Server..."
 echo ""
 
-cd "$(dirname "$0")"
+
 
 # Check Python version
 if command -v python3 &> /dev/null; then
