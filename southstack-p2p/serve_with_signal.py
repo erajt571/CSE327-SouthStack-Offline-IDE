@@ -8,7 +8,7 @@ Then: open http://localhost:8000 and use "Start session — show link & QR".
 """
 from __future__ import annotations
 
-
+import json
 import os
 import socket
 import sys
