@@ -20,7 +20,7 @@
       "peer-2": {
         "tasks": 8,
         "time_ms": 0.93,
-        "status": "done"
+        "status": "done",
         "analyze_tasks": 4,
         "fix_tasks": 4
       },
