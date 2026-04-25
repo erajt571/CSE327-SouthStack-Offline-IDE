@@ -35,7 +35,7 @@ self.addEventListener('install', (event) => {
                 console.error('[SW] Cache installation failed:', error);
             })
     );
-});
+})
 
 /**
  * Activate event - clean up old caches
