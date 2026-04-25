@@ -11,7 +11,7 @@
       message: message,
       data: data || {},
       timestamp: Date.now()
-    };
+    }
     try {
       var a = (window.__southstackDbgLog = window.__southstackDbgLog || []);
       a.push(entry);
