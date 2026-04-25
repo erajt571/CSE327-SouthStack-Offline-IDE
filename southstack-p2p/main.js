@@ -3856,25 +3856,6 @@ async function flushPendingSubtasksAfterFailover() {
   }
 }
 
-function leaveEveryTasksOut(){
-  for (const st of sharedState.subtasks) {
-    if (st.status === 'running' && st.assignedTo && !isPeerReachableForWork(st.assignedTo)) {
-      st.status = 'pending';
-      st.assignedTo = null;
-    }
-  }
-  if (P2PAgents.isLeader) {
-    for (const st of sharedState.subtasks) {
-      if (st.status === 'pending') {
-        st.assignedTo = chooseAssigneeForSubtask();
-        st.status = 'running';
-      }
-    }
-  }
-  bumpVersion();
-  broadcastState();
-}
-
 function parseSubtasksFromPlanText(planText) {
   try {
     let subtasksRaw = planText.trim();
