@@ -295,5 +295,9 @@
   ],
   "generated_at": "2026-03-30T21:21:00.157Z",
   "estimated_time_saved_vs_single_node_pct": 60,
+  "successRatePct": 100,
+  "failedTasks": 0,
+  "avgTaskTimeMs": 0.12,
+  
   "elapsed_ms": 350.86
 }
