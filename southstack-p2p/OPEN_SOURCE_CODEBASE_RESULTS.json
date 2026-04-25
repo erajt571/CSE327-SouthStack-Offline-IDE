@@ -7,7 +7,7 @@
       "actual_lines": 10168,
       "actual_chars": 387647,
       "used_files": 32,
-      "augmented": false,
+      "augmented": fals,
       "chunks": 65,
       "chunk_ms": 0.55,
       "route_ms": 0.09,
