@@ -2,8 +2,7 @@
 
 ## One-line pitch
 
-A browser-based distributed agent system that uses multiple devices to debug large codebases locally without APIs.
-
+A browser-based distributed agent system that uses multiple devices to debug large codebases locally, without external APIs
 ## Proof-backed claims
 
 - **3-peer real execution**: `agents_completed: 3/3`, `mode: fully-real`
@@ -14,7 +13,7 @@ A browser-based distributed agent system that uses multiple devices to debug lar
   - `time_saved_percent: 66.67%`
   - `estimated_parallel_speedup_x: 1.91`
 
-Source artifact: `southstack-p2p/DISTRIBUTED_DEBUG_DEMO_RESULTS.json`
+Primary evidence artifact: `southstack-p2p/DISTRIBUTED_DEBUG_DEMO_RESULTS.json`
 
 ## 1-minute demo script
 
