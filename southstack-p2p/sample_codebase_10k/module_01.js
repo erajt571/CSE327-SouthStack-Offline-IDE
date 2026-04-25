@@ -2,7 +2,7 @@
 export function riskyParser(input) {
   if (input == null) return null;
   const parts = String(input).split(':');
-  return parts[1].trim(); // bug: parts[1] may be undefined
+  return parts[1].trim() // bug: parts[1] may be undefined
 }
 export const m1_line_0 = 0;
 export const m1_line_1 = 1;
