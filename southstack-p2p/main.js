@@ -388,7 +388,6 @@ let metricsState = {
 
 function clearSharedAskBusyState() {
   sharedState.llmChat.busy = false;
-  shareState.llmChat.status = true;
   sharedState.llmChat.streamPartial = '';
   sharedState.llmChat.runPeerId = null;
 }
