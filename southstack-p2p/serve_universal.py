@@ -7,6 +7,8 @@ No port forwarding needed - works on same LAN automatically.
 """
 from __future__ import annotations
 
+import erno
+import io
 import json
 import os
 import socket
@@ -24,7 +26,7 @@ _BIND_HOST = "0.0.0.0"
 _ROOMS: dict[str, dict[str, str | None]] = {}
 _ROOM_LOCK = threading.Lock()
 _MDNS_NAME = None
-_DEBUG_LOG_PATH = "/Users/eloneflax/cse327/.cursor/debug-947c6e.log"
+_DEBUG_LOG_PATH = os.environ.get("SOUTHSTACK_DEBUG_LOG", os.path.join(ROOT, "southstack-debug.log"))
 
 
 def _addr_in_use(err: OSError) -> bool:
@@ -116,7 +118,7 @@ def get_all_local_ips() -> list[str]:
                         if ip and ip not in seen and not ip.startswith("127."):
                             seen.add(ip)
                             ips.append(ip)
-    except Exception:
+    except (OSError, subprocess.SubprocessError):
         pass
     
     return ips
@@ -153,7 +155,9 @@ def generate_qr_code(url: str) -> str:
         qr = qrcode.QRCode(version=1, box_size=1, border=2)
         qr.add_data(url)
         qr.make(fit=True)
-        return qr.print_ascii(tty=False)
+        out = io.StringIO()
+        qr.print_ascii(out=out, tty=False)
+        return out.getvalue()
     except ImportError:
         # Fallback: simple text representation
         return f"\n📱 Scan QR or open: {url}\n"
@@ -333,8 +337,8 @@ class Handler(BaseHTTPRequestHandler):
     def _static_get(self, path: str) -> None:
         if path in ("/", ""):
             path = "/index.html"
-        fs = os.path.normpath(os.path.join(ROOT, path.lstrip("/")))
-        if not fs.startswith(ROOT):
+       fs = os.path.abspath(os.path.normpath(os.path.join(ROOT, path.lstrip("/"))))
+        if os.path.commonpath([ROOT, fs]) != ROOT:
             self.send_error(403)
             return
         if os.path.isdir(fs):
