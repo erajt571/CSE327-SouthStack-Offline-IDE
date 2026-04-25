@@ -2,17 +2,6 @@
   "pass": true,
   "command": "run-debug --distributed",
   "repo": null,
-  "_meta": {
-    "units": {
-      "time_ms": "milliseconds",
-      "time_saved_percent": "percent",
-      "speedup_x": "ratio"
-    },
-    "notes": {
-      "source": "synthetic indicates demo/test dataset, not production telemetry",
-      "precision": "timing fields rounded where floating-point noise was present"
-    }
-  },
   "summary": {
     "total_files_processed": 10,
     "total_lines_processed": 10020,
