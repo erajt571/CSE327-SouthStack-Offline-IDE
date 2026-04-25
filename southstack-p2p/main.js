@@ -4,10 +4,7 @@
  */
 
 /** WebRTC expects CRLF; browsers/textareas often use LF-only when pasting. */
-function sdpToCrLf(s) {
-  const normalized = (s || '').replace(/\r?\n/g, '\r\n').trim();
-  return `${normalized}\r\n`;
-}
+
 
 function dbgLog(runId, hypothesisId, location, message, data = {}) {
   // #region agent log
