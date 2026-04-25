@@ -13,7 +13,7 @@
   "parsed_functions": 0,
   "agents_completed": "3/3",
   "peers": [
-    
+    {
       "id": "peer-1",
       "mode": "real"
     },
