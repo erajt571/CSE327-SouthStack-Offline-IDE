@@ -23,4 +23,4 @@ else
     echo "PHP: php -S localhost:8000"
     echo "VS Code: Install 'Live Server' extension"
     exit 1
-fi
+
