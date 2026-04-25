@@ -1,9 +1,7 @@
 // Service Worker for P2P SouthStack
 const CACHE = 'p2p-southstack-v8';
 
-self.addEventListener('install', e => {
-  self.skipWaiting();
-});
+
 
 self.addEventListener('activate', e => {
   self.clients.claim();
