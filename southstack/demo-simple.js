@@ -1,4 +1,7 @@
+// Simple demo version - uses esm.run CDN
+import * as webllm from "https://esm.run/@mlc-ai/web-llm";
 
+let engine;
 
 async function init() {
   console.log("Checking WebGPU...");
