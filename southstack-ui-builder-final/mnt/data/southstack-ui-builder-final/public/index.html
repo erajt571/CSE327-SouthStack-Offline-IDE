@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SouthStack Collaborative UI Builder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar left">
+      <div class="brand">
+        <div class="logo">SS</div>
+        <div><h1>SouthStack</h1><p>Offline UI Builder + LAN Peers</p></div>
+      </div>
+      <div class="panel identity">
+        <label>Your peer name</label>
+        <input id="peerName" placeholder="e.g. Turjo Laptop" />
+        <div class="pill-row"><span id="syncPill" class="pill good">syncing</span><span id="peerCount" class="pill">1 peer</span></div>
+      </div>
+      <div class="panel">
+        <h2>Screens</h2>
+        <div id="screensList" class="screens-list"></div>
+        <div class="grid2">
+          <button id="addMobile" class="btn">+ Mobile</button>
+          <button id="addWeb" class="btn">+ Web</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Add elements</h2>
+        <div class="tool-grid">
+          <button data-add="text">Text</button>
+          <button data-add="button">Button</button>
+          <button data-add="input">Input</button>
+          <button data-add="card">Card</button>
+          <button data-add="image">Image Box</button>
+          <button data-add="navbar">Navbar</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Image → editable UI</h2>
+        <input id="imageInput" type="file" accept="image/*" />
+        <div class="grid2">
+          <button id="generateFromPhoto" class="btn primary">Generate UI</button>
+          <button id="toggleReference" class="btn">Ref on/off</button>
+        </div>
+        <small>Works offline by detecting layout style and generating editable layers.</small>
+      </div>
+      <div class="panel">
+        <h2>Shared resources</h2>
+        <button id="recordAudio" class="btn">Record voice note</button>
+        <div id="resourcesList" class="resources"></div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <div class="topbar">
+        <div>
+          <strong id="screenTitle">Mobile Home</strong>
+          <span id="screenSize" class="muted"></span>
+        </div>
+        <div class="top-actions">
+          <button id="fitBtn" class="btn">Fit</button>
+          <button id="exportBtn" class="btn">Export HTML</button>
+          <button id="resetBtn" class="btn danger">Reset</button>
+        </div>
+      </div>
+      <div class="canvas-wrap" id="canvasWrap">
+        <div id="deviceCanvas" class="device-canvas">
+          <img id="referenceImage" class="reference-image hidden" alt="reference" />
+          <div id="elementsLayer"></div>
+        </div>
+      </div>
+    </main>
+
+    <aside class="sidebar right">
+      <div class="panel">
+        <h2>Selected layer</h2>
+        <div id="emptyInspector" class="muted">Click any element to edit it.</div>
+        <div id="inspector" class="inspector hidden">
+          <label>Text</label><input id="propText" />
+          <label>X / Y</label><div class="grid2"><input id="propX" type="number" /><input id="propY" type="number" /></div>
+          <label>Width / Height</label><div class="grid2"><input id="propW" type="number" /><input id="propH" type="number" /></div>
+          <label>Style</label><div class="grid2"><input id="propBg" type="color" /><input id="propColor" type="color" /></div>
+          <label>Radius</label><input id="propRadius" type="number" />
+          <label>Click action</label><input id="propAction" placeholder="go:Screen Name / alert:Hello" />
+          <div class="grid2"><button id="duplicateBtn" class="btn">Duplicate</button><button id="deleteBtn" class="btn danger">Delete</button></div>
+        </div>
+      </div>
+      <div class="panel agent-panel">
+        <h2>Local UI Agent</h2>
+        <div class="agent-row"><input id="agentCommand" placeholder="e.g. make login screen" /><button id="agentRun" class="btn primary">Run</button></div>
+        <div class="quick-prompts">
+          <button data-prompt="make a clean login screen">Login</button>
+          <button data-prompt="make a dashboard with sidebar and cards">Dashboard</button>
+          <button data-prompt="make a shopping app home screen">Shop App</button>
+        </div>
+        <div id="agentLog" class="log"></div>
+      </div>
+      <div class="panel">
+        <h2>Peers online</h2>
+        <div id="peersList" class="peers"></div>
+      </div>
+      <div class="panel">
+        <h2>Checkpoint map</h2>
+        <ol class="checkpoints">
+          <li>Photo/sketch generates editable UI and syncs to peers.</li>
+          <li>Multiple humans edit same project over same Wi-Fi.</li>
+          <li>Local agents co-work by generating screens/components.</li>
+        </ol>
+      </div>
+    </aside>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

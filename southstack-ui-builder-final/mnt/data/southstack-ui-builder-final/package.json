@@ -1,0 +1,13 @@
+{
+  "name": "southstack-ui-builder-final",
+  "version": "1.0.0",
+  "description": "CSE327/NBM final project: LAN collaborative Figma-style UI builder with image-to-editable-UI and local agent helpers.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["ui-builder", "p2p", "collaboration", "offline", "cse327"],
+  "author": "SouthStack Team",
+  "license": "MIT"
+}
